@@ -1,36 +1,33 @@
-phantomjs-prebuilt
+phantomjs-prebuilt-that-works
 ==================
 
 An NPM installer for [PhantomJS](http://phantomjs.org/), headless webkit with JS API.
 
+__Automatically falls back to other CDNs if the main one is down or oversaturated. Hence the name of this fork.__
+
 [![Build Status](https://travis-ci.org/Medium/phantomjs.svg?branch=master)](https://travis-ci.org/Medium/phantomjs)
 
-Building and Installing
+Installing
 -----------------------
 
-```shell
-npm install phantomjs-prebuilt
-```
-
-Or grab the source and
+As a library:
 
 ```shell
-node ./install.js
+npm install phantomjs-prebuilt-that-works
 ```
 
-What this installer is really doing is just grabbing a particular "blessed" (by
-this module) version of Phantom. As new versions of Phantom are released
-and vetted, this module will be updated accordingly.
-
-Running
--------
+As a cli command:
 
 ```shell
-bin/phantomjs [phantom arguments]
+npm install -g phantomjs-prebuilt-that-works
 ```
 
-And npm will install a link to the binary in `node_modules/.bin` as
-it is wont to do.
+CLI
+---
+
+```shell
+phantomjs [phantom arguments]
+```
 
 Running via node
 ----------------
@@ -43,7 +40,7 @@ Below is an example of using this package via node.
 ```javascript
 var path = require('path')
 var childProcess = require('child_process')
-var phantomjs = require('phantomjs-prebuilt')
+var phantomjs = require('phantomjs-prebuilt-that-works')
 var binPath = phantomjs.path
 
 var childArgs = [
@@ -60,7 +57,7 @@ childProcess.execFile(binPath, childArgs, function(err, stdout, stderr) {
 Or `exec()` method is also provided for convenience:
 
 ```javascript
-var phantomjs = require('phantomjs-prebuilt')
+var phantomjs = require('phantomjs-prebuilt-that-works')
 var program = phantomjs.exec('phantomjs-script.js', 'arg1', 'arg2')
 program.stdout.pipe(process.stdout)
 program.stderr.pipe(process.stderr)
@@ -77,7 +74,7 @@ Running with WebDriver
 `run()` method detects when PhantomJS gets ready. It's handy to use with WebDriver (Selenium).
 
 ```javascript
-var phantomjs = require('phantomjs-prebuilt')
+var phantomjs = require('phantomjs-prebuilt-that-works')
 var webdriverio = require('webdriverio')
 var wdOpts = { desiredCapabilities: { browserName: 'phantomjs' } }
 
@@ -91,73 +88,11 @@ phantomjs.run('--webdriver=4444').then(program => {
 })
 ```
 
-Versioning
-----------
-
-The major and minor number tracks the version of PhantomJS that will be
-installed. The patch number is incremented when there is either an installer
-update or a patch build of the phantom binary.
-
-Pre-2.0, this package was published to NPM as [phantomjs](https://www.npmjs.com/package/phantomjs).
-We changed the name to [phantomjs-prebuilt](https://www.npmjs.com/package/phantomjs-prebuilt) at
-the request of PhantomJS team.
-
-Deciding Where To Get PhantomJS
--------------------------------
-
-By default, this package will download phantomjs from our [releases](https://github.com/Medium/phantomjs/releases/).
-This should work fine for most people.
-
-##### Downloading from a custom URL
-
-If github is down, or the Great Firewall is blocking github, you may need to use
-a different download mirror. To set a mirror, set npm config property `phantomjs_cdnurl`.
-
-Alternatives include `https://bitbucket.org/ariya/phantomjs/downloads` (the official download site)
-and `http://cnpmjs.org/downloads`.
-
-```Shell
-npm install phantomjs-prebuilt --phantomjs_cdnurl=https://bitbucket.org/ariya/phantomjs/downloads
-```
-
-Or add property into your `.npmrc` file (https://www.npmjs.org/doc/files/npmrc.html)
-
-```
-phantomjs_cdnurl=https://bitbucket.org/ariya/phantomjs/downloads
-```
-
-Another option is to use PATH variable `PHANTOMJS_CDNURL`.
-```shell
-PHANTOMJS_CDNURL=https://bitbucket.org/ariya/phantomjs/downloads npm install phantomjs
-```
-
 ##### Using PhantomJS from disk
 
 If you plan to install phantomjs many times on a single machine, you can
 install the `phantomjs` binary on PATH. The installer will automatically detect
 and use that for non-global installs.
-
-Cross-Platform Repositories
----------------------------
-
-PhantomJS needs to be compiled separately for each platform. This installer
-finds a prebuilt binary for your operating system, and downloads it.
-
-If you check your dependencies into git, and work on a cross-platform
-team, then you need to tell NPM to rebuild any platform-specific dependencies. Run
-
-```shell
-npm rebuild
-```
-
-as part of your build process. This problem is not specific to PhantomJS, and this
-solution will work for any NodeJS package with native or platform-specific code.
-
-If you know in advance that you want to install PhantomJS for a specific architecture,
-you can set the environment variables: `PHANTOMJS_PLATFORM`
-(to set target platform) and `PHANTOMJS_ARCH` (to set target
-arch), where `platform` and `arch` are valid values for
-[process.platform and process.arch](https://nodejs.org/api/process.html).
 
 A Note on PhantomJS
 -------------------
@@ -242,30 +177,12 @@ conflict. This is a non-portable change, and we do not try to support this. The
 recommends that you run `apt-get install nodejs-legacy` to symlink `node` to `nodejs`
 on those platforms, or many NodeJS programs won't work properly.
 
-Contributing
-------------
-
-Questions, comments, bug reports, and pull requests are all welcome.  Submit them at
-[the project on GitHub](https://github.com/Medium/phantomjs/).  If you haven't contributed to an
-[Medium](http://github.com/Medium/) project before please head over to the
-[Open Source Project](https://github.com/Medium/open-source#note-to-external-contributors) and fill
-out an OCLA (it should be pretty painless).
-
-Bug reports that include steps-to-reproduce (including code) are the
-best. Even better, make them in the form of pull requests.
-
-Author
-------
-
-[Dan Pupius](https://github.com/dpup)
-([personal website](http://pupius.co.uk)) and
-[Nick Santos](https://github.com/nicks), supported by
-[A Medium Corporation](http://medium.com/).
-
 License
 -------
 
 Copyright 2012 [A Medium Corporation](http://medium.com/).
+
+Copyright 2015 Julian Gruber.
 
 Licensed under the Apache License, Version 2.0.
 See the top-level file `LICENSE.txt` and
